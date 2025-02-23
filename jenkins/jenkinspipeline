@@ -1,1 +1,73 @@
+pipeline {
+    agent any
 
+    environment {
+        SONARQUBE_PROJECT_KEY = 'my-sonar_project'  // Corrected variable name
+    }
+
+    parameters {
+        booleanParam(name: 'skip_test', defaultValue: false, description: 'This is to skip the test stage')
+    }
+
+    stages {
+        stage('Clone the code') {
+            steps {
+                // Cloning the repository
+                git 'https://github.com'
+            }
+        }
+
+        stage('Build the code') {
+            steps {
+                echo "Building the code with Maven"
+                sh 'mvn clean package'
+            }
+        }
+
+        stage('Test the code') {
+            when {
+                expression { return !params.skip_test }
+            }
+            steps {
+                echo "Testing the code with unit test cases"
+                sh './unittest.sh'
+            }
+        }
+
+        stage('SonarQube Integration') {
+            steps {
+                script {
+                    // Use credentials securely from Jenkins
+                    withCredentials([string(credentialsId: 'sonarqube', variable: 'token')]) {
+                        // Running the SonarQube analysis
+                        sh 'mvn clean test sonar:sonar -Dsonar.projectKey=${SONARQUBE_PROJECT_KEY} -Dsonar.host.url=${SONAR_URL} -Dsonar.login=${token}'
+                    }
+                }
+            }
+        }
+
+        stage('Push packages to Artifactory') {
+            steps {
+                script {
+                    // Define the Artifactory Server details
+                    def server = Artifactory.server 'myartifactory'
+                    def uploadSpec = """{
+                        "files": [{
+                            "pattern": "target/samplewar.war",  // Path to your artifact
+                            "target": "demo"  // Target path in Artifactory
+                        }]
+                    }"""
+
+                    // Upload the artifact to Artifactory
+                    server.upload(uploadSpec)
+                }
+            }
+        }
+    }
+
+    post {
+        always {
+            echo 'Pipeline finished'
+        }
+    }
+}
