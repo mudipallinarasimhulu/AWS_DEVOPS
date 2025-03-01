@@ -18,3 +18,8 @@
 * pods1 (applications)  >> node1 >> node2 >> pods2 (BD server)
 * service ( cluster ip ) will take care of the binding the pods ip to the service internally ( if re-start or re-installed the pods )
 * 
+NAMESPACE
+ * namespace is isolation area with in kubenetes clusters
+
+to check the available namespaces 
+kubectl get namespaces
