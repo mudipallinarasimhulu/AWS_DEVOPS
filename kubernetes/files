@@ -1,8 +1,20 @@
 #kubernetes 
-* when your trying to create pods by default will two container will create .
+* when your trying to create pods by default  two container will create .
 * first it will create pause container then it will create actual container
 * pause container will first create namespace and then it will assign to container and assign the ip address 
 * container inside pods will share the all the resource in the pods
 * using deploymnet pods will re-create if the pods are down 
-* services will create on top of the deploymnet 
+* you can run two different containers in single pods 
+* to reduce tlatencry problem will create two differenet contianers in single in pods ( multi  container) 
+* 
 
+* services will create on top of the deploymnet 
+1.cluster ip
+2.nodeport
+3.load balancer
+
+* we will use cluster ip to bind the pods and in different nodes 
+* how communications happen inside the nodes 
+* pods1 (applications)  >> node1 >> node2 >> pods2 (BD server)
+* service ( cluster ip ) will take care of the binding the pods ip to the service internally ( if re-start or re-installed the pods )
+* 
