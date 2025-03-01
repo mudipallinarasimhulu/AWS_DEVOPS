@@ -1,4 +1,4 @@
 #kubernetes 
 * when your trying to create pods by default will two container will create .
 * first it will create pause container then it will create actual container
-
+* pause container will first create namespace and then it will assign to container and assign the ip address 
