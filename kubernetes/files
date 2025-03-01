@@ -21,5 +21,24 @@
 NAMESPACE
  * namespace is isolation area with in kubenetes clusters
 
-to check the available namespaces 
+#to check the available namespaces 
 kubectl get namespaces
+#if you want to  create pods in specific namespace without providing the namespace
+* kubectl config get-contexts
+* kubectl config set-context project-1 --namespace=project-1 --user=username  --cluster=arn:aws:eks:us-east-1:084828592413:cluster/Kubernetes-TEST
+* kubctl config use-context project-1
+*kunectl get pods -all-namespace   ==> get all the namespaces
+* kubectl exec -it web-server --/bin/bash ==> get the inside the pods 
+
+TAINTS  
+
+#check the taints info
+kubectl get nodes 
+kubectl describe nodes
+#taint the node 
+kubectl taint node nodename CriticalAddonsOnly:NoSchedule
+# untaint the node 
+kubectl taint node nodename CriticalAddonsOnly:NoSchedule-
+
+
+
